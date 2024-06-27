@@ -59,16 +59,28 @@ public class Piece {
         return createBlack(Type.KNIGHT);
     }
 
-    public static Piece createBlank() {
-        return new Piece(Color.NOCOLOR, Type.NO_PIECE);
-    }
-
     private static Piece createWhite(Type type) {
         return new Piece(Color.WHITE, type);
     }
 
     private static Piece createBlack(Type type) {
         return new Piece(Color.BLACK, type);
+    }
+
+    public static Piece createBlank() {
+        return new Piece(Color.NOCOLOR, Type.NO_PIECE);
+    }
+
+    public static Piece of(char ch) {
+        Type type = Type.valueOf(ch);
+        if (type == Type.NO_PIECE) {
+            return new Piece(Color.NOCOLOR, Type.NO_PIECE);
+        }
+        if (Character.isUpperCase(ch)) {
+            return new Piece(Color.BLACK, Type.valueOf(ch));
+        } else {
+            return new Piece(Color.WHITE, Type.valueOf(ch));
+        }
     }
 
     public Color getColor() {
@@ -91,6 +103,10 @@ public class Piece {
         return this.color == Color.WHITE;
     }
 
+    public boolean isBlank() {
+        return this.color == Color.NOCOLOR || this.type == Type.NO_PIECE;
+    }
+
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
@@ -104,30 +120,5 @@ public class Piece {
         return Objects.hash(color, type);
     }
 
-    public enum Color {
-        WHITE, BLACK, NOCOLOR
-    }
 
-    public enum Type {
-        PAWN('p'), ROOK('r'), KNIGHT('n'), BISHOP('b'), QUEEN('q'), KING('k'), NO_PIECE('.');
-
-        private final char representation;
-
-        Type(char representation) {
-            this.representation = representation;
-        }
-
-        public char getRepresentation() {
-            return representation;
-        }
-
-        public static Type valueOf(char ch) {
-            for (Type type : Type.values()) {
-                if (type.getRepresentation() == ch) {
-                    return type;
-                }
-            }
-            throw new IllegalArgumentException("Invalid piece type: " + ch);
-        }
-    }
 }
